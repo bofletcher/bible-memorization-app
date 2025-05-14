@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\TranslationController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -23,5 +24,21 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/translations', [TranslationController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('translations.index');
+
+Route::get('/translations/{translation:slug}/books', [TranslationController::class, 'books'])
+    ->middleware(['auth', 'verified'])
+    ->name('translations.books');
+
+Route::get('/translations/{translation:slug}/books/{book}/chapters', [\App\Http\Controllers\TranslationController::class, 'chapters'])
+    ->middleware(['auth', 'verified'])
+    ->name('translations.books.chapters');
+
+Route::get('/translations/{translation:slug}/books/{book}/chapters/{chapter}', [\App\Http\Controllers\TranslationController::class, 'viewChapter'])
+    ->middleware(['auth', 'verified'])
+    ->name('translations.books.chapters.view');
 
 require __DIR__.'/auth.php';

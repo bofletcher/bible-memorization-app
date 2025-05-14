@@ -13,6 +13,6 @@ class Chapter extends Model
 
     public function verses()
     {
-        return $this->hasMany(\App\Models\Verse::class);
+        return $this->hasMany(Verse::class);
     }
 }
