@@ -51,4 +51,9 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\MemorizationProgress::class);
     }
 
+    public function myVerses()
+{
+    return $this->hasMany(\App\Models\MyVerse::class);
+}
+
 }

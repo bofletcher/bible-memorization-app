@@ -5,6 +5,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\TranslationController;
+use App\Http\Controllers\MyVerseController;
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -40,5 +42,22 @@ Route::get('/translations/{translation:slug}/books/{book}/chapters', [\App\Http\
 Route::get('/translations/{translation:slug}/books/{book}/chapters/{chapter}', [\App\Http\Controllers\TranslationController::class, 'viewChapter'])
     ->middleware(['auth', 'verified'])
     ->name('translations.books.chapters.view');
+
+Route::post('/my-verses', [MyVerseController::class, 'store'])
+    ->middleware(['auth', 'verified'])
+    ->name('my-verses.store');
+
+
+Route::post('/my-verses', [MyVerseController::class, 'store'])
+    ->middleware(['auth', 'verified'])
+    ->name('my-verses.store');
+
+Route::get('/my-verses', [MyVerseController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('my-verses.index');
+
+Route::delete('/my-verses/{myVerse}', [MyVerseController::class, 'destroy'])
+    ->middleware(['auth', 'verified'])
+    ->name('my-verses.destroy');
 
 require __DIR__.'/auth.php';

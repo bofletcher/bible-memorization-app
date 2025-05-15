@@ -8,7 +8,7 @@ class Verse extends Model
 {
     public function chapter()
     {
-        return $this->belongsTo(Chapter::class);
+        return $this->belongsTo(\App\Models\Chapter::class);
     }
 
     public function tags()

@@ -9,7 +9,7 @@ class Chapter extends Model
     public function book()
     {
         return $this->belongsTo(\App\Models\Book::class);
-    }
+    }    
 
     public function verses()
     {

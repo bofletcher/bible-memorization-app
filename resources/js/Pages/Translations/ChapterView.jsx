@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 
 export default function ChapterView({ translation, book, chapter, verses }) {
   const [selectedVerses, setSelectedVerses] = useState([]);
 
-  const toggleSelectVerse = (verseId) => {
+  const toggleVerse = (verseId) => {
     setSelectedVerses((prev) =>
       prev.includes(verseId)
         ? prev.filter((id) => id !== verseId)
@@ -12,10 +12,22 @@ export default function ChapterView({ translation, book, chapter, verses }) {
     );
   };
 
+  const saveToMyVerses = () => {
+    if (selectedVerses.length === 0) return;
+
+    router.post(route('my-verses.store'), {
+      verse_ids: selectedVerses,
+    }, {
+      onSuccess: () => {
+        setSelectedVerses([]); // reset selection after saving
+      }
+    });
+  };
+
   return (
     <>
       <Head title={`${book.name} ${chapter.number}`} />
-      <div className="max-w-3xl mx-auto py-8 px-4 prose prose-lg dark:prose-invert">
+      <div className="max-w-3xl mx-auto py-8 px-4 prose dark:prose-invert">
         <h1 className="text-3xl font-serif mb-6">
           {book.name} {chapter.number} <span className="text-gray-400 text-base">({translation.abbreviation})</span>
         </h1>
@@ -24,8 +36,8 @@ export default function ChapterView({ translation, book, chapter, verses }) {
           {verses.map((verse) => (
             <span
               key={verse.id}
-              onClick={() => toggleSelectVerse(verse.id)}
-              className={`cursor-pointer ${
+              onClick={() => toggleVerse(verse.id)}
+              className={`cursor-pointer inline-block ${
                 selectedVerses.includes(verse.id) ? 'bg-yellow-100' : ''
               }`}
             >
@@ -36,18 +48,13 @@ export default function ChapterView({ translation, book, chapter, verses }) {
         </div>
 
         {selectedVerses.length > 0 && (
-          <div className="mt-8 border-t pt-4">
-            <h2 className="text-xl font-semibold mb-2">Selected Verses</h2>
-            <ul className="list-disc list-inside">
-              {selectedVerses.map((verseId) => {
-                const verse = verses.find((v) => v.id === verseId);
-                return (
-                  <li key={verseId}>
-                    <span className="font-semibold">v{verse.number}:</span> {verse.text}
-                  </li>
-                );
-              })}
-            </ul>
+          <div className="mt-6">
+            <button
+              onClick={saveToMyVerses}
+              className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700"
+            >
+              💾 Save {selectedVerses.length} Verse{selectedVerses.length > 1 ? 's' : ''} to My Verses
+            </button>
           </div>
         )}
       </div>
